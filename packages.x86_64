@@ -10,7 +10,7 @@ curl
 wget
 git
 htop
-neofetch
+fastfetch
 vim
 nano
 base-devel
