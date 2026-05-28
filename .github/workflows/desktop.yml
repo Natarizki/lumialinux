@@ -1,8 +1,6 @@
-name: Build LumiaLinux Desktop (XFCE)
+name: Build LumiaLinux Desktop XFCE (x86_64 glibc)
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -32,7 +30,7 @@ jobs:
       - name: Upload Desktop ISO
         uses: actions/upload-artifact@v4
         with:
-          name: LumiaLinux-Desktop-ISO
+          name: LumiaLinux-Desktop-XFCE-x86_64-glibc
           path: "lumialinux-1.0-desktop-x86_64.iso"
           retention-days: 7
 
