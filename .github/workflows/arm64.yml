@@ -29,7 +29,11 @@ jobs:
             -v $PWD:/build \
             -w /build \
             menci/archlinuxarm:latest bash -c "
-              pacman -Sy --noconfirm archiso git base-devel &&
+              pacman -Sy --noconfirm git base-devel &&
+              git clone https://gitlab.archlinux.org/archlinux/archiso.git /tmp/archiso &&
+              cd /tmp/archiso &&
+              make install &&
+              cd /build &&
               sed -i 's/x86_64/aarch64/' profiledef.sh &&
               mkarchiso -v -w /tmp/work -o /build .
             "
