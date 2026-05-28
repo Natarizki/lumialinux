@@ -27,7 +27,10 @@ jobs:
             -v $PWD:/build \
             -w /build \
             menci/archlinuxarm:latest bash -c "
-              pacman -Sy --noconfirm --overwrite '*' git base-devel python-docutils squashfs-tools dosfstools mtools &&
+              pacman -Sy --noconfirm --overwrite '*' \
+                git base-devel python-docutils \
+                squashfs-tools dosfstools mtools \
+                arch-install-scripts &&
               git clone https://gitlab.archlinux.org/archlinux/archiso.git /tmp/archiso &&
               cd /tmp/archiso &&
               make install &&
