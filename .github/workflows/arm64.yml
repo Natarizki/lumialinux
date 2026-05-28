@@ -7,26 +7,18 @@ on:
 
 jobs:
   build-arm64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 120
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up QEMU for ARM64
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y qemu-user-static binfmt-support
-          sudo update-binfmts --enable qemu-aarch64
-
       - name: Build ARM64 ISO in privileged Arch container
         run: |
           docker run --privileged --rm \
             -v $PWD:/build \
-            -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
             -w /build \
-            --platform linux/arm64 \
             archlinux:latest bash -c "
               pacman -Sy --noconfirm archiso git base-devel &&
               sed -i 's/x86_64/aarch64/' profiledef.sh &&

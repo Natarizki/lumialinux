@@ -7,35 +7,17 @@ xorg-xinit
 lightdm
 lightdm-gtk-greeter
 lightdm-gtk-greeter-settings
-
-# Display & compositing
 picom
-nitrogen
-
-# Audio
 pulseaudio
 pavucontrol
-
-# File manager
 thunar
 thunar-archive-plugin
 thunar-volman
-
-# Terminal
 xfce4-terminal
-
-# Fonts
 ttf-dejavu
 ttf-liberation
 noto-fonts
-
-# Theme
-arc-gtk-theme
 papirus-icon-theme
-
-# Browser
 firefox
-
-# VM support
 virtualbox-guest-utils
-xf86-video-vmware
+open-vm-tools
