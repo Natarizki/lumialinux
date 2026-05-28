@@ -39,7 +39,10 @@ jobs:
               sed -i 's/arch=\"x86_64\"/arch=\"aarch64\"/' profiledef.sh &&
               sed -i \"s/bootmodes=.*/bootmodes=('uefi.systemd-boot')/\" profiledef.sh &&
               echo 'esp_size=512' >> profiledef.sh &&
-              mkarchiso -v -w /tmp/work -o /build . 2>&1 | tee /build/build.log
+              mkarchiso -v -w /tmp/work -o /build . 2>&1 | tee /build/build.log || true &&
+              ln -sf /tmp/work/aarch64/airootfs/boot/Image \
+                /tmp/work/aarch64/airootfs/boot/vmlinuz-linux 2>/dev/null || true &&
+              mkarchiso -v -w /tmp/work -o /build . 2>&1 | tee -a /build/build.log
             "
           ls -lah
           find . -name "*.iso" 2>/dev/null
