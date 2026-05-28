@@ -1,8 +1,6 @@
 name: Build LumiaLinux ARM64 (aarch64 glibc)
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -29,7 +27,7 @@ jobs:
             -v $PWD:/build \
             -w /build \
             menci/archlinuxarm:latest bash -c "
-              pacman -Sy --noconfirm --overwrite '*' git base-devel &&
+              pacman -Sy --noconfirm --overwrite '*' git base-devel python-docutils &&
               git clone https://gitlab.archlinux.org/archlinux/archiso.git /tmp/archiso &&
               cd /tmp/archiso &&
               make install &&
