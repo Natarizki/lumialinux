@@ -1,0 +1,44 @@
+name: Build LumiaLinux Desktop (XFCE)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-desktop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build Desktop ISO in privileged Arch container
+        run: |
+          docker run --privileged --rm \
+            -v $PWD:/build \
+            -w /build \
+            archlinux:latest bash -c "
+              pacman -Sy --noconfirm archiso git base-devel &&
+              cat packages.x86_64 packages.desktop > /tmp/packages.combined &&
+              cp /tmp/packages.combined packages.x86_64 &&
+              mkarchiso -v -w /tmp/work -o /build .
+            "
+          mv lumialinux-1.0-x86_64.iso lumialinux-1.0-desktop-x86_64.iso 2>/dev/null || true
+          ls -lah
+          find . -name "*.iso" 2>/dev/null
+
+      - name: Upload Desktop ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: LumiaLinux-Desktop-ISO
+          path: "lumialinux-1.0-desktop-x86_64.iso"
+          retention-days: 7
+
+      - name: Upload log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-build-log
+          path: "*.log"
