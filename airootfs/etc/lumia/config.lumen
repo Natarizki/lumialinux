@@ -1,0 +1,5 @@
+# Lumen CLI Config - LumiaLinux
+SAFE_INSTALL=true
+AUTO_UPDATE=false
+REPO_CHANNEL=stable
+VERBOSE=false
