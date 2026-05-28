@@ -35,7 +35,7 @@ jobs:
               cd /tmp/archiso &&
               make install &&
               cd /build &&
-              cp packages.x86_64 packages.aarch64 &&
+              cp packages.aarch64 packages.x86_64 &&
               sed -i 's/arch=\"x86_64\"/arch=\"aarch64\"/' profiledef.sh &&
               sed -i \"s/bootmodes=.*/bootmodes=('uefi.systemd-boot')/\" profiledef.sh &&
               mkarchiso -v -w /tmp/work -o /build .
