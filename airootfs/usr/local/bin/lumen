@@ -24,9 +24,8 @@ put_package() {
   echo "🔍 Searching '$PKG' in AUR and external sources..."
   install_yay
   yay -S --noconfirm "$PKG" && echo "✅ $PKG installed from AUR!" || {
-    echo "❌ '$PKG' not found in AUR, trying Obarun..."
+    echo "❌ Not found in AUR, trying Obarun..."
     if [ "$PKG" = "66" ] || [ "$PKG" = "66-tools" ]; then
-      echo "📡 Installing 66 from Obarun..."
       curl -fsSL https://repo.obarun.org/obarun-keyring.gpg | pacman-key --add -
       echo "[obarun]
 Server = https://repo.obarun.org/\$arch" >> /etc/pacman.conf
@@ -35,6 +34,35 @@ Server = https://repo.obarun.org/\$arch" >> /etc/pacman.conf
       echo "❌ '$PKG' not found in any source."
     fi
   }
+}
+
+dev_mode() {
+  DEV_USER_HASH=$(cat /etc/lumia/.dev_user 2>/dev/null)
+  DEV_PASS_HASH=$(cat /etc/lumia/.dev_pass 2>/dev/null)
+
+  if [ -z "$DEV_USER_HASH" ] || [ -z "$DEV_PASS_HASH" ]; then
+    echo "❌ Dev mode not available."
+    exit 1
+  fi
+
+  read -p "Username: " INPUT_USER
+  read -sp "Password: " INPUT_PASS
+  echo ""
+
+  INPUT_USER_HASH=$(echo -n "$INPUT_USER" | sha256sum | awk '{print $1}')
+  INPUT_PASS_HASH=$(echo -n "$INPUT_PASS" | sha256sum | awk '{print $1}')
+
+  if [ "$INPUT_USER_HASH" = "$DEV_USER_HASH" ] && \
+     [ "$INPUT_PASS_HASH" = "$DEV_PASS_HASH" ]; then
+    echo "✅ Dev mode activated!"
+    echo "🔧 LumiaLinux Developer Console"
+    echo "   Version: 1.0"
+    echo "   Developer: Natarizki"
+    sudo -s
+  else
+    echo "❌ Invalid credentials."
+    exit 1
+  fi
 }
 
 case "$1" in
@@ -59,6 +87,7 @@ case "$1" in
   -CG)  cat "$CONFIG" ;;
   -Rl)  source "$CONFIG" && echo "✅ Config reloaded." ;;
   -v)   VERBOSE_MODE=true; shift; lumen "$@" ;;
+  -D)   dev_mode ;;
   -H)
     echo "📦 LUMEN CLI - LumiaLinux Package Manager"
     echo ""
