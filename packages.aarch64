@@ -1,7 +1,6 @@
 base
-linux
+linux-aarch64
 linux-firmware
-syslinux
 grub
 efibootmgr
 mkinitcpio
@@ -21,4 +20,3 @@ npm
 openssh
 net-tools
 mesa
-open-vm-tools
