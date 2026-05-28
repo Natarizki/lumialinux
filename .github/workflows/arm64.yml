@@ -29,7 +29,7 @@ jobs:
             -v $PWD:/build \
             -w /build \
             menci/archlinuxarm:latest bash -c "
-              pacman -Sy --noconfirm git base-devel &&
+              pacman -Sy --noconfirm --overwrite '*' git base-devel &&
               git clone https://gitlab.archlinux.org/archlinux/archiso.git /tmp/archiso &&
               cd /tmp/archiso &&
               make install &&
