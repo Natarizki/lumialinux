@@ -38,8 +38,15 @@ jobs:
               cp packages.aarch64 packages.x86_64 &&
               sed -i 's/arch=\"x86_64\"/arch=\"aarch64\"/' profiledef.sh &&
               sed -i \"s/bootmodes=.*/bootmodes=('uefi.systemd-boot')/\" profiledef.sh &&
-              sed -i 's/linux-aarch64/linux-armv8/' profiledef.sh 2>/dev/null || true &&
-              mkarchiso -v -w /tmp/work -o /build . 2>&1 | tee /build/build.log
+              mkarchiso -v -w /tmp/work -o /build . 2>&1 | tee /build/build.log || true &&
+              ls /tmp/work/aarch64/airootfs/boot/ &&
+              VMLINUZ=\$(ls /tmp/work/aarch64/airootfs/boot/vmlinuz* 2>/dev/null | head -1) &&
+              if [ -z \"\$VMLINUZ\" ]; then
+                find /tmp/work/aarch64/airootfs/boot/ -name '*linux*' &&
+                ln -sf \$(find /tmp/work/aarch64/airootfs/boot/ -name '*Image*' | head -1) \
+                  /tmp/work/aarch64/airootfs/boot/vmlinuz-linux &&
+                mkarchiso -v -w /tmp/work -o /build .
+              fi
             "
           ls -lah
           find . -name "*.iso" 2>/dev/null
