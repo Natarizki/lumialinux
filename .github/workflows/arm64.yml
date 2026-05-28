@@ -1,0 +1,51 @@
+name: Build LumiaLinux ARM64 (aarch64 glibc)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-arm64:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU for ARM64
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static binfmt-support
+          sudo update-binfmts --enable qemu-aarch64
+
+      - name: Build ARM64 ISO in privileged Arch container
+        run: |
+          docker run --privileged --rm \
+            -v $PWD:/build \
+            -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static \
+            -w /build \
+            --platform linux/arm64 \
+            archlinux:latest bash -c "
+              pacman -Sy --noconfirm archiso git base-devel &&
+              sed -i 's/x86_64/aarch64/' profiledef.sh &&
+              mkarchiso -v -w /tmp/work -o /build .
+            "
+          mv lumialinux-1.0-x86_64.iso lumialinux-1.0-aarch64.iso 2>/dev/null || true
+          ls -lah
+          find . -name "*.iso" 2>/dev/null
+
+      - name: Upload ARM64 ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: LumiaLinux-aarch64-glibc
+          path: "lumialinux-1.0-aarch64.iso"
+          retention-days: 7
+
+      - name: Upload log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm64-build-log
+          path: "*.log"
