@@ -27,12 +27,14 @@ jobs:
             -v $PWD:/build \
             -w /build \
             menci/archlinuxarm:latest bash -c "
-              pacman -Sy --noconfirm --overwrite '*' git base-devel python-docutils &&
+              pacman -Sy --noconfirm --overwrite '*' git base-devel python-docutils squashfs-tools dosfstools mtools &&
               git clone https://gitlab.archlinux.org/archlinux/archiso.git /tmp/archiso &&
               cd /tmp/archiso &&
               make install &&
               cd /build &&
-              sed -i 's/x86_64/aarch64/' profiledef.sh &&
+              cp packages.x86_64 packages.aarch64 &&
+              sed -i 's/arch=\"x86_64\"/arch=\"aarch64\"/' profiledef.sh &&
+              sed -i \"s/bootmodes=.*/bootmodes=('uefi.systemd-boot')/\" profiledef.sh &&
               mkarchiso -v -w /tmp/work -o /build .
             "
           ls -lah
@@ -51,4 +53,3 @@ jobs:
         with:
           name: arm64-build-log
           path: "*.log"
-# ARM64 build
