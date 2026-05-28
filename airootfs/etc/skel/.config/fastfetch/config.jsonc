@@ -1,0 +1,26 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "small",
+    "source": "  \u001b[94m▄▄▄▄▄▄▄▄\u001b[0m\n  \u001b[94m████████\u001b[34m▄\u001b[0m\n  \u001b[94m████\u001b[34m▄▄▄▄▄\u001b[0m\n  \u001b[34m▀████████\u001b[0m\n  \u001b[34m  ▀█████\u001b[94m▄\u001b[0m\n  \u001b[34m    ▀███\u001b[94m██\u001b[0m\n  \u001b[94m▄▄   ████\u001b[0m\n  \u001b[94m████▄▄████\u001b[0m\n  \u001b[94m ▀████▀▀\u001b[0m\n",
+    "colors": ["blue", "cyan"]
+  },
+  "display": {
+    "separator": "  "
+  },
+  "modules": [
+    "title",
+    "separator",
+    "os",
+    "kernel",
+    "uptime",
+    "packages",
+    "shell",
+    "terminal",
+    "cpu",
+    "memory",
+    "disk",
+    "separator",
+    "colors"
+  ]
+}
